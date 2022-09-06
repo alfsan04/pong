@@ -13,6 +13,20 @@ class Bola:
     def dibujar(self, pantalla):
         pg.draw.circle(pantalla, self.color, (self.center_x, self.center_y), self.radio)
 
+    def mover(self, x_max = 800, y_max = 600):
+        self.center_x += self.vx
+        self.center_y += self.vy
+
+        if self.center_y >= y_max - self.radio or self.center_y <= self.radio:
+            self.vy *= -1
+
+        if self.center_x >= x_max or self.center_x < 0:
+            self.center_x = x_max // 2
+            self.center_y = y_max // 2
+
+            self.vx *= -1
+            self.vy *= -1
+
 class Raqueta:
     def __init__(self, center_x, center_y, w = 120, h = 20, color=(255, 255, 0)):
         self.center_x = center_x
