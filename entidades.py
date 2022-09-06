@@ -20,12 +20,25 @@ class Bola:
         if self.center_y >= y_max - self.radio or self.center_y <= self.radio:
             self.vy *= -1
 
-        if self.center_x >= x_max or self.center_x < 0:
+        if self.center_x < 0:
+
             self.center_x = x_max // 2
             self.center_y = y_max // 2
 
             self.vx *= -1
             self.vy *= -1
+
+            return 'LEFT'
+        
+        if self.center_x >= x_max:
+            
+            self.center_x = x_max // 2
+            self.center_y = y_max // 2
+
+            self.vx *= -1
+            self.vy *= -1
+
+            return 'RIGHT'
 
     def comprobar_choque(self, *raquetas):
         for raqueta_activa in raquetas:
