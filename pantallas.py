@@ -25,6 +25,8 @@ class Partida:
         self.puntuacion1 = 0
         self.puntuacion2 = 0
 
+        self.fuenteMarcador = pg.font.Font("fonts/silkscreen.ttf", 40)
+
     def bucle_ppal(self):
         self.bola.vx = 5
         self.bola.vy = -5
@@ -42,17 +44,23 @@ class Partida:
             self.raqueta2.mover(pg.K_UP, pg.K_DOWN)
             quien = self.bola.mover()
             if quien == 'RIGHT':
-                self.puntuacion2 += 1
-            elif quien == 'LEFT':
                 self.puntuacion1 += 1
+                print(f'{self.puntuacion1} - {self.puntuacion2}')
+            elif quien == 'LEFT':
+                self.puntuacion2 += 1
+                print(f'{self.puntuacion1} - {self.puntuacion2}')
             
             self.bola.comprobar_choque(self.raqueta1, self.raqueta2)
 
             self.pantalla_principal.fill(NEGRO)
-
             self.bola.dibujar(self.pantalla_principal)
             self.raqueta1.dibujar(self.pantalla_principal)
             self.raqueta2.dibujar(self.pantalla_principal)
+
+            p1 = self.fuenteMarcador.render(str(self.puntuacion1), True, BLANCO)
+            p2 = self.fuenteMarcador.render(str(self.puntuacion2), True, BLANCO)
+            self.pantalla_principal.blit(p1,(10,10))
+            self.pantalla_principal.blit(p2, (760,10))
             
 
             pg.display.flip()
