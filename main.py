@@ -33,5 +33,7 @@ while not game_over:
     raqueta1.dibujar(pantalla_principal)
     raqueta2.dibujar(pantalla_principal)
     bola.mover()
+    bola.comprobar_choque(raqueta1, raqueta2)
+
     pg.display.flip()
 
