@@ -1,14 +1,6 @@
 import pygame as pg
-from entidades import Bola, Raqueta
-
-ANCHO = 800
-ALTO = 600
-
-BLANCO = (255, 255, 255)
-NEGRO = (0, 0, 0)
-AMARILLO = (255, 255, 0)
-
-pg.init()
+from pong.entidades import Bola, Raqueta
+from pong import ANCHO, ALTO, BLANCO, NEGRO, FPS
 
 class Partida:
     def __init__(self):
@@ -25,7 +17,7 @@ class Partida:
         self.puntuacion1 = 0
         self.puntuacion2 = 0
 
-        self.fuenteMarcador = pg.font.Font("fonts/silkscreen.ttf", 40)
+        self.fuenteMarcador = pg.font.Font("pong/fonts/silkscreen.ttf", 40)
 
     def bucle_ppal(self):
         self.bola.vx = 5
@@ -33,9 +25,9 @@ class Partida:
 
         game_over = False
 
-        while not game_over:
+        while not game_over and self.puntuacion1 < 10 and self.puntuacion2 < 10:
             'Controlamos la tasa de refresco, hace 60 bucles por segundo, uno cada aprox 16 milisegundos'
-            self.metronomo.tick(60)
+            self.metronomo.tick(FPS)
             for evento in pg.event.get():
                 if evento.type == pg.QUIT:
                     game_over = True
@@ -60,7 +52,7 @@ class Partida:
             p1 = self.fuenteMarcador.render(str(self.puntuacion1), True, BLANCO)
             p2 = self.fuenteMarcador.render(str(self.puntuacion2), True, BLANCO)
             self.pantalla_principal.blit(p1,(10,10))
-            self.pantalla_principal.blit(p2, (760,10))
+            self.pantalla_principal.blit(p2, (ANCHO - 40,10))
             
 
             pg.display.flip()
