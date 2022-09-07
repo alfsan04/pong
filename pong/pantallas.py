@@ -1,6 +1,6 @@
 import pygame as pg
 from pong.entidades import Bola, Raqueta
-from pong import ANCHO, ALTO, BLANCO, NEGRO, FPS, TIEMPO_MAXIMO_PARTIDA
+from pong import ANCHO, ALTO, BLANCO, NARANJA, NEGRO, FPS, PRIMER_AVISO, ROJO, SEGUNDO_AVISO, TIEMPO_MAXIMO_PARTIDA
 
 class Partida:
     def __init__(self):
@@ -20,6 +20,14 @@ class Partida:
 
         self.fuenteMarcador = pg.font.Font("pong/fonts/silkscreen.ttf", 40)
         self.fuenteTemporizador = pg.font.Font("pong/fonts/silkscreen.ttf", 20)
+
+    def fijar_fondo(self):
+        if self.temporizador > PRIMER_AVISO:
+            return NEGRO
+        elif self.temporizador > SEGUNDO_AVISO:
+            return NARANJA
+        else:
+            return ROJO
 
     def bucle_ppal(self):
         self.bola.vx = 5
@@ -47,7 +55,7 @@ class Partida:
             
             self.bola.comprobar_choque(self.raqueta1, self.raqueta2)
 
-            self.pantalla_principal.fill(NEGRO)
+            self.pantalla_principal.fill(self.fijar_fondo())
             self.bola.dibujar(self.pantalla_principal)
             self.raqueta1.dibujar(self.pantalla_principal)
             self.raqueta2.dibujar(self.pantalla_principal)
