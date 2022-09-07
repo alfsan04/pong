@@ -1,4 +1,4 @@
-from pong.pantallas import Partida
+from pong.pantallas import Partida, Menu
 
-juego = Partida()
+juego = Menu()
 juego.bucle_ppal()

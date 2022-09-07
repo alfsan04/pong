@@ -1,6 +1,6 @@
 import pygame as pg
 from pong.entidades import Bola, Raqueta
-from pong import ANCHO, ALTO, BLANCO, NARANJA, NEGRO, FPS, PRIMER_AVISO, ROJO, SEGUNDO_AVISO, TIEMPO_MAXIMO_PARTIDA
+from pong import ANCHO, ALTO, BLANCO, MAGENTA, NARANJA, NEGRO, FPS, PRIMER_AVISO, ROJO, SEGUNDO_AVISO, TIEMPO_MAXIMO_PARTIDA
 
 class Partida:
     def __init__(self):
@@ -85,4 +85,29 @@ class Partida:
             self.contador_fotogramas += 1
             
 
+            pg.display.flip()
+
+class Menu:
+    def __init__(self):
+        self.pantalla_principal = pg.display.set_mode((ANCHO, ALTO))
+        pg.display.set_caption("Menu")
+        self.metronomo = pg.time.Clock()
+        self.imagenFondo = pg.image.load("pong/images/portada.jpeg")
+        self.fuenteComenzar = pg.font.Font("pong/fonts/silkscreen.ttf", 50)
+
+    def bucle_ppal(self):
+        game_over = False
+        
+        while not game_over:
+            for evento in pg.event.get():
+                if evento.type == pg.QUIT:
+                    game_over = True
+                
+                if evento.type == pg.KEYDOWN:
+                    if evento.key == pg.K_RETURN:
+                        game_over = True
+
+            self.pantalla_principal.blit(self.imagenFondo, (0, 0))
+            menu = self.fuenteComenzar.render("Pulsa ENTER para comenzar", True, MAGENTA)
+            self.pantalla_principal.blit(menu, (ANCHO // 2, ALTO - 150))
             pg.display.flip()
