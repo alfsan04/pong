@@ -21,13 +21,28 @@ class Partida:
         self.fuenteMarcador = pg.font.Font("pong/fonts/silkscreen.ttf", 40)
         self.fuenteTemporizador = pg.font.Font("pong/fonts/silkscreen.ttf", 20)
 
+        self.contador_fotogramas = 0
+        self.cambiar_color = True
+
     def fijar_fondo(self):
         if self.temporizador > PRIMER_AVISO:
             return NEGRO
         elif self.temporizador > SEGUNDO_AVISO:
-            return NARANJA
+            #cada 10 fotogramas cambia de naranja a negro y viceversa
+            if self.contador_fotogramas % 10 == 0:
+                self.cambiar_color = not(self.cambiar_color)
+            if self.cambiar_color == True:
+                return NARANJA
+            else:
+                return NEGRO
         else:
-            return ROJO
+            #cada 5 fotogramas cambia de rojo a negro y viceversa
+            if self.contador_fotogramas % 5 == 0:
+                self.cambiar_color = not(self.cambiar_color)
+            if self.cambiar_color == True:
+                return ROJO
+            else:
+                return NEGRO
 
     def bucle_ppal(self):
         self.bola.vx = 5
@@ -67,6 +82,7 @@ class Partida:
             self.pantalla_principal.blit(p2, (ANCHO - 40,10))
             if self.temporizador >= 0:
                 self.pantalla_principal.blit(contador, (ANCHO // 2, 10))
+            self.contador_fotogramas += 1
             
 
             pg.display.flip()
