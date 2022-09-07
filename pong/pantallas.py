@@ -1,12 +1,13 @@
 import pygame as pg
 from pong.entidades import Bola, Raqueta
-from pong import ANCHO, ALTO, BLANCO, NEGRO, FPS
+from pong import ANCHO, ALTO, BLANCO, NEGRO, FPS, TIEMPO_MAXIMO_PARTIDA
 
 class Partida:
     def __init__(self):
         self.pantalla_principal = pg.display.set_mode((ANCHO, ALTO))
         pg.display.set_caption("Pong")
         self.metronomo = pg.time.Clock()
+        self.temporizador = TIEMPO_MAXIMO_PARTIDA
 
         self.bola = Bola(ANCHO // 2, ALTO // 2, color = BLANCO)
         self.raqueta1 = Raqueta(20, ALTO // 2, w=20, h=120, color = BLANCO)
@@ -18,6 +19,7 @@ class Partida:
         self.puntuacion2 = 0
 
         self.fuenteMarcador = pg.font.Font("pong/fonts/silkscreen.ttf", 40)
+        self.fuenteTemporizador = pg.font.Font("pong/fonts/silkscreen.ttf", 20)
 
     def bucle_ppal(self):
         self.bola.vx = 5
@@ -25,9 +27,10 @@ class Partida:
 
         game_over = False
 
-        while not game_over and self.puntuacion1 < 10 and self.puntuacion2 < 10:
+        while not game_over and self.puntuacion1 < 10 and self.puntuacion2 < 10 and self.temporizador > 0:
             'Controlamos la tasa de refresco, hace 60 bucles por segundo, uno cada aprox 16 milisegundos'
-            self.metronomo.tick(FPS)
+            salto_tiempo = self.metronomo.tick(FPS)
+            self.temporizador -= salto_tiempo
             for evento in pg.event.get():
                 if evento.type == pg.QUIT:
                     game_over = True
@@ -51,8 +54,11 @@ class Partida:
 
             p1 = self.fuenteMarcador.render(str(self.puntuacion1), True, BLANCO)
             p2 = self.fuenteMarcador.render(str(self.puntuacion2), True, BLANCO)
+            contador = self.fuenteTemporizador.render(str(self.temporizador / 1000), True, BLANCO)
             self.pantalla_principal.blit(p1,(10,10))
             self.pantalla_principal.blit(p2, (ANCHO - 40,10))
+            if self.temporizador >= 0:
+                self.pantalla_principal.blit(contador, (ANCHO // 2, 10))
             
 
             pg.display.flip()
