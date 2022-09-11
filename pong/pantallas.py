@@ -1,12 +1,12 @@
 import pygame as pg
 from pong.entidades import Bola, Raqueta
-from pong import ANCHO, ALTO, BLANCO, MAGENTA, NARANJA, NEGRO, FPS, PRIMER_AVISO, ROJO, SEGUNDO_AVISO, TIEMPO_MAXIMO_PARTIDA
+from pong import ANCHO, ALTO, BLANCO, MAGENTA, NARANJA, NEGRO, FPS, PRIMER_AVISO, PUNTUACION_GANADORA, ROJO, SEGUNDO_AVISO, TIEMPO_MAXIMO_PARTIDA
 
 class Partida:
-    def __init__(self):
-        self.pantalla_principal = pg.display.set_mode((ANCHO, ALTO))
+    def __init__(self, pantalla, metronomo):
+        self.pantalla_principal = pantalla
+        self.metronomo = metronomo
         pg.display.set_caption("Pong")
-        self.metronomo = pg.time.Clock()
         self.temporizador = TIEMPO_MAXIMO_PARTIDA
 
         self.bola = Bola(ANCHO // 2, ALTO // 2, color = BLANCO)
@@ -47,16 +47,23 @@ class Partida:
     def bucle_ppal(self):
         self.bola.vx = 5
         self.bola.vy = -5
+        self.puntuacion1 = 0
+        self.puntuacion2 = 0
+        self.temporizador = TIEMPO_MAXIMO_PARTIDA
 
         game_over = False
-
-        while not game_over and self.puntuacion1 < 10 and self.puntuacion2 < 10 and self.temporizador > 0:
+        self.metronomo.tick()
+        while not game_over and \
+               self.puntuacion1 < PUNTUACION_GANADORA and \
+               self.puntuacion2 < PUNTUACION_GANADORA and \
+               self.temporizador > 0:
+            
             'Controlamos la tasa de refresco, hace 60 bucles por segundo, uno cada aprox 16 milisegundos'
             salto_tiempo = self.metronomo.tick(FPS)
             self.temporizador -= salto_tiempo
             for evento in pg.event.get():
                 if evento.type == pg.QUIT:
-                    game_over = True
+                    return True
 
             self.raqueta1.mover(pg.K_w, pg.K_s)
             self.raqueta2.mover(pg.K_UP, pg.K_DOWN)
@@ -88,10 +95,10 @@ class Partida:
             pg.display.flip()
 
 class Menu:
-    def __init__(self):
-        self.pantalla_principal = pg.display.set_mode((ANCHO, ALTO))
+    def __init__(self, pantalla, metronomo):
+        self.pantalla_principal = pantalla
+        self.metronomo = metronomo
         pg.display.set_caption("Menu")
-        self.metronomo = pg.time.Clock()
         self.imagenFondo = pg.image.load("pong/images/portada.jpeg")
         self.fuenteComenzar = pg.font.Font("pong/fonts/silkscreen.ttf", 50)
 
@@ -101,7 +108,7 @@ class Menu:
         while not game_over:
             for evento in pg.event.get():
                 if evento.type == pg.QUIT:
-                    game_over = True
+                    return True
                 
                 if evento.type == pg.KEYDOWN:
                     if evento.key == pg.K_RETURN:
