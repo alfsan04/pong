@@ -101,9 +101,11 @@ class Menu:
         pg.display.set_caption("Menu")
         self.imagenFondo = pg.image.load("pong/images/portada.jpeg")
         self.fuenteComenzar = pg.font.Font("pong/fonts/silkscreen.ttf", 50)
+        self.musica = pg.mixer.Sound("pong/sounds/8-Bit.mp3")
 
     def bucle_ppal(self):
         game_over = False
+        self.musica.play(-1)
         
         while not game_over:
             for evento in pg.event.get():
@@ -118,3 +120,4 @@ class Menu:
             menu = self.fuenteComenzar.render("Pulsa ENTER para comenzar", True, MAGENTA)
             self.pantalla_principal.blit(menu, (ANCHO // 2, ALTO - 150))
             pg.display.flip()
+        self.musica.stop()
